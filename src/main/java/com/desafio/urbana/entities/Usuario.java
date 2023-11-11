@@ -1,11 +1,22 @@
 package com.desafio.urbana.entities;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.List;
 
+@Table(name = "Usuario")
+@Entity(name = "Usuario")
 public class Usuario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank(message = "Insira seu nome")
     private String nome;
+    @NotBlank(message = "Insira seu e-mail")
     private String email;
+    @NotBlank(message = "Insira sua senha")
     private String senha;
     private List<Cartao> cartao;
 
