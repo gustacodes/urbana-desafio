@@ -8,8 +8,4 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class UsuarioService {
 
-    public int gerarNumeroDoCartao() {
-        int numeroGerado = ThreadLocalRandom.current().nextInt(10000000, 100000000);
-        return numeroGerado;
-    }
 }

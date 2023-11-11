@@ -1,33 +1,33 @@
 package com.desafio.urbana.entities;
 
 import com.desafio.urbana.enums.TipoCartao;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
-import java.math.BigInteger;
-
-@Table(name = "Cartao")
-@Entity(name = "Cartao")
 public class Cartao {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigInteger numeroCartao;
-    @NotBlank(message = "Selecione o cartão desejado")
+    private Long numeroCartao;
     private String nome;
     private boolean status;
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "Selecione o tipo do cartão")
-    private TipoCartao cartao;
+    private TipoCartao tipoCartao;
+    private Usuario usuario;
 
-    public Cartao(Long id, BigInteger numeroCartao, String nome, boolean status, TipoCartao cartao) {
+    public Cartao(Long id, Long numeroCartao, String nome, boolean status, TipoCartao tipoCartao) {
         this.id = id;
         this.numeroCartao = numeroCartao;
         this.nome = nome;
         this.status = status;
-        this.cartao = cartao;
+        this.tipoCartao = tipoCartao;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -38,11 +38,11 @@ public class Cartao {
         this.id = id;
     }
 
-    public BigInteger getNumeroCartao() {
+    public Long getNumeroCartao() {
         return numeroCartao;
     }
 
-    public void setNumeroCartao(BigInteger numeroCartao) {
+    public void setNumeroCartao(Long numeroCartao) {
         this.numeroCartao = numeroCartao;
     }
 
@@ -54,7 +54,7 @@ public class Cartao {
         this.nome = nome;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 
@@ -62,11 +62,11 @@ public class Cartao {
         this.status = status;
     }
 
-    public TipoCartao getCartao() {
-        return cartao;
+    public TipoCartao getTipoCartao() {
+        return tipoCartao;
     }
 
-    public void setCartao(TipoCartao cartao) {
-        this.cartao = cartao;
+    public void setTipoCartao(TipoCartao tipoCartao) {
+        this.tipoCartao = tipoCartao;
     }
 }

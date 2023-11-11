@@ -3,28 +3,31 @@ package com.desafio.urbana.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "Usuario")
-@Entity(name = "Usuario")
 public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Insira seu nome")
     private String nome;
-    @NotBlank(message = "Insira seu e-mail")
     private String email;
-    @NotBlank(message = "Insira sua senha")
     private String senha;
-    private List<Cartao> cartao;
+    private List<Cartao> cartao = new ArrayList<>();
 
-    public Usuario(String nome, String email, String senha, List<Cartao> cartao) {
+    public Usuario(Long id, String nome, String email, String senha, List<Cartao> cartao) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.cartao = cartao;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
