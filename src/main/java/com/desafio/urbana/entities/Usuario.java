@@ -6,21 +6,17 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Usuario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String email;
     private String senha;
-    private List<Cartao> cartao = new ArrayList<>();
-
-    public Usuario(Long id, String nome, String email, String senha, List<Cartao> cartao) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.cartao = cartao;
-    }
+    @OneToMany
+    private List<Cartao> cartao;
 
     public Long getId() {
         return id;

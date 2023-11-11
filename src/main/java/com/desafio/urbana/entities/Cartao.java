@@ -1,26 +1,21 @@
 package com.desafio.urbana.entities;
 
 import com.desafio.urbana.enums.TipoCartao;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 
+@Entity
 public class Cartao {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long numeroCartao;
+    private Long numero_cartao;
     private String nome;
     private boolean status;
     @Enumerated(EnumType.STRING)
-    private TipoCartao tipoCartao;
+    private TipoCartao tipo_cartao;
+    @ManyToOne
     private Usuario usuario;
-
-    public Cartao(Long id, Long numeroCartao, String nome, boolean status, TipoCartao tipoCartao) {
-        this.id = id;
-        this.numeroCartao = numeroCartao;
-        this.nome = nome;
-        this.status = status;
-        this.tipoCartao = tipoCartao;
-    }
 
     public Usuario getUsuario() {
         return usuario;
@@ -38,12 +33,12 @@ public class Cartao {
         this.id = id;
     }
 
-    public Long getNumeroCartao() {
-        return numeroCartao;
+    public Long getNumero_cartao() {
+        return numero_cartao;
     }
 
-    public void setNumeroCartao(Long numeroCartao) {
-        this.numeroCartao = numeroCartao;
+    public void setNumero_cartao(Long numero_cartao) {
+        this.numero_cartao = numero_cartao;
     }
 
     public String getNome() {
@@ -63,10 +58,10 @@ public class Cartao {
     }
 
     public TipoCartao getTipoCartao() {
-        return tipoCartao;
+        return tipo_cartao;
     }
 
-    public void setTipoCartao(TipoCartao tipoCartao) {
-        this.tipoCartao = tipoCartao;
+    public void setTipoCartao(TipoCartao tipo_cartao) {
+        this.tipo_cartao = tipo_cartao;
     }
 }
