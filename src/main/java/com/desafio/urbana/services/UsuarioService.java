@@ -23,4 +23,8 @@ public class UsuarioService {
         return usuarioRepository.listar();
     }
 
+    public Usuario buscar(String email) {
+        return usuarioRepository.buscar(email);
+    }
+
 }

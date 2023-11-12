@@ -1,6 +1,8 @@
 package com.desafio.urbana.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
@@ -12,8 +14,12 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Nome obrigatório")
     private String nome;
+    @NotBlank(message = "E-mail obrigatório")
+    @Email(message = "Formato de e-mail inválido")
     private String email;
+    @NotBlank(message = "Senha obrigatória")
     private String senha;
     @OneToMany
     private List<Cartao> cartao;

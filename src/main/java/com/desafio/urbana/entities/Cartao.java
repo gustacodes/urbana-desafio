@@ -3,6 +3,9 @@ package com.desafio.urbana.entities;
 import com.desafio.urbana.enums.TipoCartao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Cartao {
@@ -11,12 +14,14 @@ public class Cartao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long numero_cartao;
+    @NotBlank(message = "Selecione o nome do cartão")
     private String nome;
     private boolean status;
     @Enumerated(EnumType.STRING)
     private TipoCartao tipo_cartao;
     @JsonIgnore
     @ManyToOne
+    @Valid
     private Usuario usuario;
 
     public Usuario getUsuario() {
