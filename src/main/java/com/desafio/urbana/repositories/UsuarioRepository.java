@@ -4,6 +4,7 @@ import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.execptions.ConsultaUsuarioPorEmailException;
 import com.desafio.urbana.execptions.EmailExistenteExceptions;
+import com.desafio.urbana.services.CartaoService;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UsuarioRepository {
     private EntityManager entityManager;
 
     @Autowired
-    private CartaoRepository cartaoRepository;
+    private CartaoService cartaoService;
 
     public Usuario criarUsuario(Usuario usuario) {
 
@@ -28,7 +29,7 @@ public class UsuarioRepository {
         Long usuarioId = obterIdUsuarioPorEmail(usuario.getEmail());
 
         if (usuario.getCartao() != null) {
-            cartaoRepository.associarCartoesAoUsuario(usuarioId, usuario.getCartao());
+            cartaoService.associarCartoesAoUsuario(usuarioId, usuario.getCartao());
         }
 
         return usuario;

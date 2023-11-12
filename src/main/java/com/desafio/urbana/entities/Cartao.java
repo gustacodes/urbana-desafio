@@ -13,7 +13,7 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long numero_cartao;
+    private int numero_cartao;
     @NotBlank(message = "Selecione o nome do cartão")
     private String nome;
     private boolean status;
@@ -40,11 +40,11 @@ public class Cartao {
         this.id = id;
     }
 
-    public Long getNumero_cartao() {
+    public int getNumero_cartao() {
         return numero_cartao;
     }
 
-    public void setNumero_cartao(Long numero_cartao) {
+    public void setNumero_cartao(int numero_cartao) {
         this.numero_cartao = numero_cartao;
     }
 

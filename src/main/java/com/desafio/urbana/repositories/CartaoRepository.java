@@ -4,11 +4,14 @@ import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Random;
 
 @Repository
+@Transactional
 public class CartaoRepository {
 
     @PersistenceContext
@@ -23,6 +26,12 @@ public class CartaoRepository {
     }
 
     public void persistirCartao(Cartao cartao, Long usuarioId) {
+
+        var numeroGerado = new Random();
+        int numero = numeroGerado.nextInt(1000000);
+
+        cartao.setNumero_cartao(numero);
+
         String jpql = "INSERT INTO cartao(numero_cartao, nome, status, tipo_cartao, usuario_id) VALUES (:numero_cartao, :nome, :status, :tipo_cartao, :usuario_id)";
         entityManager.createNativeQuery(jpql)
                 .setParameter("numero_cartao", cartao.getNumero_cartao())
