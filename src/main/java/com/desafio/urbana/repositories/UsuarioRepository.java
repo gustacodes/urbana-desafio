@@ -7,6 +7,7 @@ import com.desafio.urbana.execptions.EmailExistenteExceptions;
 import com.desafio.urbana.services.CartaoService;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -88,21 +89,31 @@ public class UsuarioRepository {
     }
 
     public void removerUsuario(Long id) {
-        // Encontrar o usuário
         Usuario usuario = entityManager.find(Usuario.class, id);
 
-        // Remover manualmente as entradas em usuario_cartao
         List<Cartao> cartoes = usuario.getCartao();
         for (Cartao cartao : cartoes) {
-            // Remover as entradas em usuario_cartao
             entityManager.createNativeQuery("DELETE FROM usuario_cartao WHERE cartao_id = :cartaoId")
                     .setParameter("cartaoId", cartao.getId())
                     .executeUpdate();
         }
 
-        // Agora você pode excluir o usuário
         entityManager.remove(usuario);
 
+    }
+
+    public Usuario autalizarUsuario(Long id, Usuario usuario) {
+
+        Usuario buscaUsuario = entityManager.find(Usuario.class, id);
+        usuario.setId(id);
+        usuario.setCartao(buscaUsuario.getCartao());
+
+        if (buscaUsuario != null) {
+            BeanUtils.copyProperties(usuario, buscaUsuario);
+            entityManager.merge(buscaUsuario);
+        }
+
+        return buscaUsuario;
 
     }
 

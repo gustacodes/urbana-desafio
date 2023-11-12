@@ -55,4 +55,23 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity atualizarUsuario(@PathVariable Long id, @RequestBody @Valid Usuario usuario, BindingResult result) {
+
+        if (result.hasErrors()) {
+
+            Map<String, String> errors = new HashMap<>();
+
+            result.getFieldErrors().forEach(error -> {
+                String fieldName = error.getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            });
+
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        return ResponseEntity.ok().body(usuarioService.atualizarUsuario(id, usuario));
+    }
+
 }

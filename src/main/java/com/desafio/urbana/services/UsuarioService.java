@@ -31,4 +31,8 @@ public class UsuarioService {
         usuarioRepository.removerUsuario(id);
     }
 
+    public Usuario atualizarUsuario(Long id, Usuario usuario) {
+        return usuarioRepository.autalizarUsuario(id, usuario);
+    }
+
 }
