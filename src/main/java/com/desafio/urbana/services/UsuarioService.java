@@ -27,4 +27,8 @@ public class UsuarioService {
         return usuarioRepository.buscar(email);
     }
 
+    public void removerUsuario(Long id) {
+        usuarioRepository.removerUsuario(id);
+    }
+
 }

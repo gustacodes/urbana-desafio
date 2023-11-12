@@ -87,4 +87,23 @@ public class UsuarioRepository {
 
     }
 
+    public void removerUsuario(Long id) {
+        // Encontrar o usuário
+        Usuario usuario = entityManager.find(Usuario.class, id);
+
+        // Remover manualmente as entradas em usuario_cartao
+        List<Cartao> cartoes = usuario.getCartao();
+        for (Cartao cartao : cartoes) {
+            // Remover as entradas em usuario_cartao
+            entityManager.createNativeQuery("DELETE FROM usuario_cartao WHERE cartao_id = :cartaoId")
+                    .setParameter("cartaoId", cartao.getId())
+                    .executeUpdate();
+        }
+
+        // Agora você pode excluir o usuário
+        entityManager.remove(usuario);
+
+
+    }
+
 }

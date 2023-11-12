@@ -21,7 +21,7 @@ public class Usuario {
     private String email;
     @NotBlank(message = "Senha obrigatória")
     private String senha;
-    @OneToMany
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Cartao> cartao;
 
     public Long getId() {

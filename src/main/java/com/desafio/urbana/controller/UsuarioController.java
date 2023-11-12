@@ -49,4 +49,10 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioService.buscar(email));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity removerUsuario(@PathVariable Long id) {
+        usuarioService.removerUsuario(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
