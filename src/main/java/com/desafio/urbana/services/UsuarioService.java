@@ -1,5 +1,6 @@
 package com.desafio.urbana.services;
 
+import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,10 @@ public class UsuarioService {
 
     public Usuario atualizarUsuario(Long id, Usuario usuario) {
         return usuarioRepository.autalizarUsuario(id, usuario);
+    }
+
+    public Usuario adicionaNovoCartao(Long id, Cartao cartao) {
+        return usuarioRepository.adicionaNovoCartao(id, cartao);
     }
 
 }

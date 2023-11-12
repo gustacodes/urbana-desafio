@@ -1,5 +1,6 @@
 package com.desafio.urbana.controller;
 
+import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.services.UsuarioService;
 import jakarta.validation.Valid;
@@ -45,7 +46,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Usuario> buscar(@PathVariable String email) {
+    public ResponseEntity<Usuario> buscarUsuario(@PathVariable String email) {
         return ResponseEntity.ok().body(usuarioService.buscar(email));
     }
 
@@ -72,6 +73,25 @@ public class UsuarioController {
         }
 
         return ResponseEntity.ok().body(usuarioService.atualizarUsuario(id, usuario));
+    }
+
+    @PutMapping("/novo-cartao/{id}")
+    public ResponseEntity adicionaNovoCartao(@PathVariable Long id, @RequestBody @Valid Cartao cartao, BindingResult result) {
+
+        if (result.hasErrors()) {
+
+            Map<String, String> errors = new HashMap<>();
+
+            result.getFieldErrors().forEach(error -> {
+                String fieldName = error.getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            });
+
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        return ResponseEntity.ok().body(usuarioService.adicionaNovoCartao(id, cartao));
     }
 
 }

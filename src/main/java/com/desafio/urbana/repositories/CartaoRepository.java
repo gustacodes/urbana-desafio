@@ -18,11 +18,13 @@ public class CartaoRepository {
     private EntityManager entityManager;
 
     public void associarCartoesAoUsuario(Long usuarioId, List<Cartao> cartoes) {
+
         for (Cartao cartao : cartoes) {
             persistirCartao(cartao, usuarioId);
             Long cartaoId = obterUltimoIdInserido();
             associarUsuarioCartao(usuarioId, cartaoId);
         }
+
     }
 
     public void persistirCartao(Cartao cartao, Long usuarioId) {

@@ -1,4 +1,4 @@
-package com.desafio.urbana.execptions;
+package com.desafio.urbana.exceptions;
 
 import jakarta.persistence.NonUniqueResultException;
 

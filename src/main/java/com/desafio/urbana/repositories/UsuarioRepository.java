@@ -2,8 +2,8 @@ package com.desafio.urbana.repositories;
 
 import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
-import com.desafio.urbana.execptions.ConsultaUsuarioPorEmailException;
-import com.desafio.urbana.execptions.EmailExistenteExceptions;
+import com.desafio.urbana.exceptions.ConsultaUsuarioPorEmailException;
+import com.desafio.urbana.exceptions.EmailExistenteExceptions;
 import com.desafio.urbana.services.CartaoService;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -37,12 +38,14 @@ public class UsuarioRepository {
     }
 
     private void persistirUsuario(Usuario usuario) {
+
         String jpql = "INSERT INTO usuario(nome, email, senha) VALUES (:nome, :email, :senha)";
         Query usuarioQuery = entityManager.createNativeQuery(jpql)
                 .setParameter("nome", usuario.getNome())
                 .setParameter("email", usuario.getEmail())
                 .setParameter("senha", usuario.getSenha());
         usuarioQuery.executeUpdate();
+
     }
 
     private Long obterIdUsuarioPorEmail(String email) {
@@ -89,6 +92,7 @@ public class UsuarioRepository {
     }
 
     public void removerUsuario(Long id) {
+
         Usuario usuario = entityManager.find(Usuario.class, id);
 
         List<Cartao> cartoes = usuario.getCartao();
@@ -106,7 +110,6 @@ public class UsuarioRepository {
 
         Usuario buscaUsuario = entityManager.find(Usuario.class, id);
         usuario.setId(id);
-        usuario.setCartao(buscaUsuario.getCartao());
 
         if (buscaUsuario != null) {
             BeanUtils.copyProperties(usuario, buscaUsuario);
@@ -114,6 +117,19 @@ public class UsuarioRepository {
         }
 
         return buscaUsuario;
+
+    }
+
+    public Usuario adicionaNovoCartao(Long id, Cartao cartao) {
+
+        List<Cartao> card = new ArrayList<>();
+        card.add(cartao);
+
+        Usuario usuario = entityManager.find(Usuario.class, id);
+        cartaoService.associarCartoesAoUsuario(id, card);
+        entityManager.merge(usuario);
+
+        return usuario;
 
     }
 
