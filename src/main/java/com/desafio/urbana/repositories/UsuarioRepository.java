@@ -29,17 +29,22 @@ public class UsuarioRepository {
 
         usuarioQuery.executeUpdate();
 
-        Long usuarioId = ((Long) entityManager.createNativeQuery("SELECT LAST_INSERT_ID()").getSingleResult()).longValue();
+        String jpql = "SELECT id FROM usuario WHERE email = :email";
+
+        Long usuarioId = ((Long) entityManager.createNativeQuery(jpql)
+                .setParameter("email", usuario.getEmail())
+                .getSingleResult()).longValue();
 
         for (Cartao cartao : usuario.getCartao()) {
 
-            String jpqlCartao = "INSERT INTO cartao(numero_cartao, nome, status, tipo_cartao) VALUES (:numero_cartao, :nome, :status, :tipo_cartao)";
+            String jpqlCartao = "INSERT INTO cartao(numero_cartao, nome, status, tipo_cartao, usuario_id) VALUES (:numero_cartao, :nome, :status, :tipo_cartao, :usuario_id)";
 
             entityManager.createNativeQuery(jpqlCartao)
                     .setParameter("numero_cartao", cartao.getNumero_cartao())
                     .setParameter("nome", cartao.getNome())
                     .setParameter("status", cartao.getStatus())
                     .setParameter("tipo_cartao", cartao.getTipoCartao().name())
+                    .setParameter("usuario_id", usuarioId)
                     .executeUpdate();
 
             Long cartaoId = ((Long) entityManager.createNativeQuery("SELECT LAST_INSERT_ID()").getSingleResult()).longValue();
@@ -57,11 +62,25 @@ public class UsuarioRepository {
     }
 
     public List<Usuario> listar() {
+
         String jpql = "SELECT u FROM Usuario u";
         TypedQuery<Usuario> query = entityManager.createQuery(jpql, Usuario.class);
         List<Usuario> usuarios = query.getResultList();
 
         return usuarios;
+    }
+
+    public Usuario buscar(String email) {
+
+        String jpql = "SELECT u FROM Usuario u WHERE u.email = :email";
+
+        TypedQuery<Usuario> query = entityManager.createQuery(jpql, Usuario.class);
+        query.setParameter("email", email);
+        Usuario usuarios = query.getSingleResult();
+        System.out.println(usuarios.getNome());
+
+        return usuarios;
+
     }
 
 }

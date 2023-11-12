@@ -1,6 +1,7 @@
 package com.desafio.urbana.entities;
 
 import com.desafio.urbana.enums.TipoCartao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +15,7 @@ public class Cartao {
     private boolean status;
     @Enumerated(EnumType.STRING)
     private TipoCartao tipo_cartao;
+    @JsonIgnore
     @ManyToOne
     private Usuario usuario;
 
