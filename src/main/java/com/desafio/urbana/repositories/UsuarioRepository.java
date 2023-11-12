@@ -6,6 +6,7 @@ import com.desafio.urbana.execptions.ConsultaUsuarioPorEmailException;
 import com.desafio.urbana.execptions.EmailExistenteExceptions;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class UsuarioRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private CartaoRepository cartaoRepository;
+
     public Usuario criarUsuario(Usuario usuario) {
 
         persistirUsuario(usuario);
@@ -24,7 +28,7 @@ public class UsuarioRepository {
         Long usuarioId = obterIdUsuarioPorEmail(usuario.getEmail());
 
         if (usuario.getCartao() != null) {
-            associarCartoesAoUsuario(usuarioId, usuario.getCartao());
+            cartaoRepository.associarCartoesAoUsuario(usuarioId, usuario.getCartao());
         }
 
         return usuario;
@@ -53,37 +57,6 @@ public class UsuarioRepository {
             throw new EmailExistenteExceptions("E-mail já cadastrado no sistema.");
         }
 
-    }
-
-    private void associarCartoesAoUsuario(Long usuarioId, List<Cartao> cartoes) {
-        for (Cartao cartao : cartoes) {
-            persistirCartao(cartao, usuarioId);
-            Long cartaoId = obterUltimoIdInserido();
-            associarUsuarioCartao(usuarioId, cartaoId);
-        }
-    }
-
-    private void persistirCartao(Cartao cartao, Long usuarioId) {
-        String jpql = "INSERT INTO cartao(numero_cartao, nome, status, tipo_cartao, usuario_id) VALUES (:numero_cartao, :nome, :status, :tipo_cartao, :usuario_id)";
-        entityManager.createNativeQuery(jpql)
-                .setParameter("numero_cartao", cartao.getNumero_cartao())
-                .setParameter("nome", cartao.getNome())
-                .setParameter("status", true)
-                .setParameter("tipo_cartao", cartao.getTipoCartao().name())
-                .setParameter("usuario_id", usuarioId)
-                .executeUpdate();
-    }
-
-    private Long obterUltimoIdInserido() {
-        return ((Long) entityManager.createNativeQuery("SELECT LAST_INSERT_ID()").getSingleResult()).longValue();
-    }
-
-    private void associarUsuarioCartao(Long usuarioId, Long cartaoId) {
-        String jpql = "INSERT INTO usuario_cartao(usuario_id, cartao_id) VALUES (:usuarioId, :cartaoId)";
-        entityManager.createNativeQuery(jpql)
-                .setParameter("usuarioId", usuarioId)
-                .setParameter("cartaoId", cartaoId)
-                .executeUpdate();
     }
 
     public List<Usuario> listar() {
