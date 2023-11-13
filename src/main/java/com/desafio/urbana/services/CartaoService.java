@@ -32,4 +32,8 @@ public class CartaoService {
         cartaoRepository.associarUsuarioCartao(usuarioId, cartaoId);
     }
 
+    public void removerCartao(Long id) {
+        cartaoRepository.removerCartao(id);
+    }
+
 }

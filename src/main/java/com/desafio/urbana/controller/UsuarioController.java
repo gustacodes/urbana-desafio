@@ -2,6 +2,7 @@ package com.desafio.urbana.controller;
 
 import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
+import com.desafio.urbana.services.CartaoService;
 import com.desafio.urbana.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private CartaoService cartaoService;
 
     @PostMapping
     public ResponseEntity criarUsuario(@RequestBody @Valid Usuario usuario, BindingResult result) {
@@ -75,7 +79,7 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioService.atualizarUsuario(id, usuario));
     }
 
-    @PutMapping("/novo-cartao/{id}")
+    @PutMapping("/novo/{id}")
     public ResponseEntity adicionaNovoCartao(@PathVariable Long id, @RequestBody @Valid Cartao cartao, BindingResult result) {
 
         if (result.hasErrors()) {
@@ -92,6 +96,12 @@ public class UsuarioController {
         }
 
         return ResponseEntity.ok().body(usuarioService.adicionaNovoCartao(id, cartao));
+    }
+
+    @DeleteMapping("/remover-cartao/{id}")
+    public ResponseEntity removerCartao(@PathVariable Long id) {
+        cartaoService.removerCartao(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

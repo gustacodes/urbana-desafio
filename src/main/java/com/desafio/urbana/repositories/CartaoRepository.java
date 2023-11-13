@@ -56,4 +56,15 @@ public class CartaoRepository {
                 .executeUpdate();
     }
 
+    public void removerCartao(Long id) {
+
+        Cartao cartao = entityManager.find(Cartao.class, id);
+
+        entityManager.createNativeQuery("DELETE FROM usuario_cartao WHERE cartao_id = :cartaoId")
+                .setParameter("cartaoId", cartao.getId())
+                .executeUpdate();
+
+        entityManager.remove(cartao);
+    }
+
 }

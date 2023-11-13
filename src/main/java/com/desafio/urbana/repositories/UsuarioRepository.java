@@ -96,6 +96,7 @@ public class UsuarioRepository {
         Usuario usuario = entityManager.find(Usuario.class, id);
 
         List<Cartao> cartoes = usuario.getCartao();
+
         for (Cartao cartao : cartoes) {
             entityManager.createNativeQuery("DELETE FROM usuario_cartao WHERE cartao_id = :cartaoId")
                     .setParameter("cartaoId", cartao.getId())
