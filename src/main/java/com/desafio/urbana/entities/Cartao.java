@@ -13,10 +13,10 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int numero_cartao;
+    private Integer numero_cartao;
     @NotBlank(message = "Selecione o nome do cartão")
     private String nome;
-    private boolean status;
+    private Boolean status;
     @Enumerated(EnumType.STRING)
     private TipoCartao tipo_cartao;
     @JsonIgnore

@@ -4,6 +4,7 @@ import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.exceptions.ConsultaUsuarioPorEmailException;
 import com.desafio.urbana.exceptions.EmailExistenteExceptions;
+import com.desafio.urbana.exceptions.UsuarioInexistenteExceptions;
 import com.desafio.urbana.services.CartaoService;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
@@ -93,17 +94,23 @@ public class UsuarioRepository {
 
     public void removerUsuario(Long id) {
 
-        Usuario usuario = entityManager.find(Usuario.class, id);
+        try {
 
-        List<Cartao> cartoes = usuario.getCartao();
+            Usuario usuario = entityManager.find(Usuario.class, id);
 
-        for (Cartao cartao : cartoes) {
-            entityManager.createNativeQuery("DELETE FROM usuario_cartao WHERE cartao_id = :cartaoId")
-                    .setParameter("cartaoId", cartao.getId())
-                    .executeUpdate();
+            List<Cartao> cartoes = usuario.getCartao();
+
+            for (Cartao cartao : cartoes) {
+                entityManager.createNativeQuery("DELETE FROM usuario_cartao WHERE cartao_id = :cartaoId")
+                        .setParameter("cartaoId", cartao.getId())
+                        .executeUpdate();
+            }
+
+            entityManager.remove(usuario);
+
+        } catch (NullPointerException exceptions) {
+            throw new UsuarioInexistenteExceptions("Usuário não encontrado.");
         }
-
-        entityManager.remove(usuario);
 
     }
 
