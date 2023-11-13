@@ -16,7 +16,7 @@ public class Cartao {
     private Integer numero_cartao;
     @NotBlank(message = "Selecione o nome do cartão")
     private String nome;
-    private Boolean status;
+    private Boolean status = true;
     @Enumerated(EnumType.STRING)
     private TipoCartao tipo_cartao;
     @JsonIgnore

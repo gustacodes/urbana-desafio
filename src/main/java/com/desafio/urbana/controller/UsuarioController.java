@@ -98,6 +98,11 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioService.adicionaNovoCartao(id, cartao));
     }
 
+    @PutMapping("/cartao/status/{id}/{numero}")
+    public ResponseEntity StatusCartao(@PathVariable Long id, @PathVariable Integer numero) {
+        return ResponseEntity.ok().body(usuarioService.StatusCartao(id, numero));
+    }
+
     @DeleteMapping("/remover-cartao/{id}")
     public ResponseEntity removerCartao(@PathVariable Long id) {
         cartaoService.removerCartao(id);

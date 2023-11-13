@@ -40,4 +40,8 @@ public class UsuarioService {
         return usuarioRepository.adicionaNovoCartao(id, cartao);
     }
 
+    public Usuario StatusCartao(Long id, Integer numero) {
+        return usuarioRepository.StatusCartao(id, numero);
+    }
+
 }

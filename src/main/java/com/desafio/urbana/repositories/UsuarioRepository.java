@@ -141,4 +141,27 @@ public class UsuarioRepository {
 
     }
 
+    public Usuario StatusCartao(Long id, Integer numero) {
+
+        Usuario usuario = entityManager.find(Usuario.class, id);
+        Boolean status;
+
+        for (int i = 0; i < usuario.getCartao().size(); i++) {
+
+            if (usuario.getCartao().get(i).getNumero_cartao() == numero) {
+                if (usuario.getCartao().get(i).getStatus() == true) {
+                    usuario.getCartao().get(i).setStatus(false);
+                } else {
+                    usuario.getCartao().get(i).setStatus(true);
+                }
+            }
+
+        }
+
+        entityManager.merge(usuario);
+
+        return usuario;
+
+    }
+
 }
