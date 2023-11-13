@@ -41,6 +41,7 @@ public class UsuarioRepository {
     private void persistirUsuario(Usuario usuario) {
 
         String jpql = "INSERT INTO usuario(nome, email, senha) VALUES (:nome, :email, :senha)";
+
         Query usuarioQuery = entityManager.createNativeQuery(jpql)
                 .setParameter("nome", usuario.getNome())
                 .setParameter("email", usuario.getEmail())
@@ -82,6 +83,7 @@ public class UsuarioRepository {
 
             TypedQuery<Usuario> query = entityManager.createQuery(jpql, Usuario.class);
             query.setParameter("email", email);
+
             Usuario usuarios = query.getSingleResult();
 
             return usuarios;
@@ -114,17 +116,17 @@ public class UsuarioRepository {
 
     }
 
-    public Usuario autalizarUsuario(Long id, Usuario usuario) {
+    public Usuario autalizarUsuario(Long id, Usuario usuarioAtualizado) {
 
-        Usuario buscaUsuario = entityManager.find(Usuario.class, id);
-        usuario.setId(id);
+        Usuario usuarioExistente = entityManager.find(Usuario.class, id);
+        usuarioAtualizado.setId(usuarioExistente.getId());
 
-        if (buscaUsuario != null) {
-            BeanUtils.copyProperties(usuario, buscaUsuario);
-            entityManager.merge(buscaUsuario);
+        if (usuarioExistente != null) {
+            BeanUtils.copyProperties(usuarioAtualizado, usuarioExistente);
+            entityManager.merge(usuarioExistente);
         }
 
-        return buscaUsuario;
+        return usuarioExistente;
 
     }
 
