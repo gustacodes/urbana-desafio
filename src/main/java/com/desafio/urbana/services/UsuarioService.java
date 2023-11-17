@@ -1,5 +1,6 @@
 package com.desafio.urbana.services;
 
+import com.desafio.urbana.dto.UsuarioAtualizarDTO;
 import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.repositories.UsuarioRepository;
@@ -32,8 +33,8 @@ public class UsuarioService {
         usuarioRepository.removerUsuario(id);
     }
 
-    public Usuario atualizarUsuario(Long id, Usuario usuario) {
-        return usuarioRepository.autalizarUsuario(id, usuario);
+    public Usuario atualizarUsuario(Long id, UsuarioAtualizarDTO atualizarDTO) {
+        return usuarioRepository.autalizarUsuario(id, atualizarDTO);
     }
 
     public Usuario adicionaNovoCartao(Long id, Cartao cartao) {

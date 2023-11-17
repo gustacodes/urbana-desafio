@@ -1,5 +1,6 @@
 package com.desafio.urbana.repositories;
 
+import com.desafio.urbana.dto.UsuarioAtualizarDTO;
 import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.exceptions.ConsultaUsuarioPorEmailException;
@@ -116,13 +117,23 @@ public class UsuarioRepository {
 
     }
 
-    public Usuario autalizarUsuario(Long id, Usuario usuarioAtualizado) {
+    public Usuario autalizarUsuario(Long id, UsuarioAtualizarDTO usuarioDTO) {
 
         Usuario usuarioExistente = entityManager.find(Usuario.class, id);
-        usuarioAtualizado.setId(usuarioExistente.getId());
 
         if (usuarioExistente != null) {
-            BeanUtils.copyProperties(usuarioAtualizado, usuarioExistente);
+            if (usuarioDTO.nome() != null) {
+                usuarioExistente.setNome(usuarioDTO.nome());
+            }
+
+            if (usuarioDTO.email() != null) {
+                usuarioExistente.setEmail(usuarioDTO.email());
+            }
+
+            if (usuarioDTO.senha() != null) {
+                usuarioExistente.setSenha(usuarioDTO.senha());
+            }
+
             entityManager.merge(usuarioExistente);
         }
 

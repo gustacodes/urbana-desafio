@@ -1,5 +1,6 @@
 package com.desafio.urbana.controller;
 
+import com.desafio.urbana.dto.UsuarioAtualizarDTO;
 import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.services.CartaoService;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class UsuarioController {
 
     @Autowired
@@ -54,28 +56,14 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioService.buscar(email));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/remove/{id}")
     public ResponseEntity removerUsuario(@PathVariable Long id) {
         usuarioService.removerUsuario(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity atualizarUsuario(@PathVariable Long id, @RequestBody @Valid Usuario usuario, BindingResult result) {
-
-        if (result.hasErrors()) {
-
-            Map<String, String> errors = new HashMap<>();
-
-            result.getFieldErrors().forEach(error -> {
-                String fieldName = error.getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.put(fieldName, errorMessage);
-            });
-
-            return ResponseEntity.badRequest().body(errors);
-        }
-
+    public ResponseEntity atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioAtualizarDTO usuario) {
         return ResponseEntity.ok().body(usuarioService.atualizarUsuario(id, usuario));
     }
 
@@ -98,7 +86,7 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioService.adicionaNovoCartao(id, cartao));
     }
 
-    @PutMapping("/cartao/status/{id}/{numero}")
+    @PutMapping("/{id}/status/{numero}")
     public ResponseEntity StatusCartao(@PathVariable Long id, @PathVariable Integer numero) {
         return ResponseEntity.ok().body(usuarioService.StatusCartao(id, numero));
     }
