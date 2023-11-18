@@ -1,8 +1,9 @@
 package com.desafio.urbana.repositories;
 
 import com.desafio.urbana.entities.Cartao;
-import com.desafio.urbana.entities.Usuario;
+import com.desafio.urbana.exceptions.ConsultaUsuarioPorEmailException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,29 @@ public class CartaoRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Transactional
+    public Cartao alterarStatus(Long id) {
+
+        Cartao cartao = buscarCartaoId(id);
+        cartao.setStatus(!cartao.getStatus());
+        entityManager.merge(cartao);
+
+        return cartao;
+
+    }
+
+    public Cartao buscarCartaoId(Long id) {
+
+        try {
+
+            return entityManager.find(Cartao.class, id);
+
+        } catch (NoResultException e) {
+            throw new ConsultaUsuarioPorEmailException("Cartão não encontrado! Verifique o e-mail digitado.");
+        }
+
+    }
 
     public void associarCartoesAoUsuario(Long usuarioId, List<Cartao> cartoes) {
 
@@ -32,11 +56,11 @@ public class CartaoRepository {
         var numeroGerado = new Random();
         int numero = numeroGerado.nextInt(1000000);
 
-        cartao.setNumero_cartao(numero);
+        cartao.setNumeroCartao(numero);
 
         String jpql = "INSERT INTO cartao(numero_cartao, nome, status, tipo_cartao, usuario_id) VALUES (:numero_cartao, :nome, :status, :tipo_cartao, :usuario_id)";
         entityManager.createNativeQuery(jpql)
-                .setParameter("numero_cartao", cartao.getNumero_cartao())
+                .setParameter("numero_cartao", cartao.getNumeroCartao())
                 .setParameter("nome", cartao.getNome())
                 .setParameter("status", true)
                 .setParameter("tipo_cartao", cartao.getTipoCartao().name())

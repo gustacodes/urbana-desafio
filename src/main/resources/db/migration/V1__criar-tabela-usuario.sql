@@ -2,5 +2,7 @@ CREATE TABLE usuario (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(250) NOT NULL,
     email VARCHAR(250) NOT NULL,
-    senha VARCHAR(250) NOT NULL
+    senha VARCHAR(250) NOT NULL,
+
+    CONSTRAINT unique_email UNIQUE (email)
 );

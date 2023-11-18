@@ -1,11 +1,9 @@
 package com.desafio.urbana.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,8 +19,8 @@ public class Usuario {
     private String email;
     @NotBlank(message = "Senha obrigatória")
     private String senha;
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Cartao> cartao;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cartao> cartoes;
 
     public Long getId() {
         return id;
@@ -56,11 +54,11 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public List<Cartao> getCartao() {
-        return cartao;
+    public List<Cartao> getCartoes() {
+        return cartoes;
     }
 
-    public void setCartao(List<Cartao> cartao) {
-        this.cartao = cartao;
+    public void setCartoes(List<Cartao> cartoes) {
+        this.cartoes = cartoes;
     }
 }

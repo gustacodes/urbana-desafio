@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Cartao {
@@ -13,12 +12,14 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer numero_cartao;
+    @Column(name = "numero_cartao")
+    private Integer numeroCartao;
     @NotBlank(message = "Selecione o nome do cartão")
     private String nome;
     private Boolean status = true;
     @Enumerated(EnumType.STRING)
-    private TipoCartao tipo_cartao;
+    @Column(name = "tipo_cartao")
+    private TipoCartao tipoCartao;
     @JsonIgnore
     @ManyToOne
     @Valid
@@ -40,12 +41,12 @@ public class Cartao {
         this.id = id;
     }
 
-    public int getNumero_cartao() {
-        return numero_cartao;
+    public int getNumeroCartao() {
+        return numeroCartao;
     }
 
-    public void setNumero_cartao(int numero_cartao) {
-        this.numero_cartao = numero_cartao;
+    public void setNumeroCartao(int numeroCartao) {
+        this.numeroCartao = numeroCartao;
     }
 
     public String getNome() {
@@ -65,10 +66,10 @@ public class Cartao {
     }
 
     public TipoCartao getTipoCartao() {
-        return tipo_cartao;
+        return tipoCartao;
     }
 
     public void setTipoCartao(TipoCartao tipo_cartao) {
-        this.tipo_cartao = tipo_cartao;
+        this.tipoCartao = tipo_cartao;
     }
 }

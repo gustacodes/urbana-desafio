@@ -1,20 +1,21 @@
 package com.desafio.urbana.controller;
 
-import com.desafio.urbana.dto.UsuarioAtualizarDTO;
+import com.desafio.urbana.dto.CartaoDTO;
+import com.desafio.urbana.dto.UsuarioCriarDTO;
+import com.desafio.urbana.dto.UsuarioDTO;
 import com.desafio.urbana.entities.Cartao;
 import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.services.CartaoService;
 import com.desafio.urbana.services.UsuarioService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -27,71 +28,54 @@ public class UsuarioController {
     @Autowired
     private CartaoService cartaoService;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @PostMapping
-    public ResponseEntity criarUsuario(@RequestBody @Valid Usuario usuario, BindingResult result) {
-
-        if (result.hasErrors()) {
-
-            Map<String, String> errors = new HashMap<>();
-
-            result.getFieldErrors().forEach(error -> {
-                String fieldName = error.getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.put(fieldName, errorMessage);
-            });
-
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.criar(usuario));
+    public ResponseEntity criar(@RequestBody @Valid UsuarioCriarDTO usuarioCriarDTO) {
+        var usuarioNovo = usuarioService.criar(mapper.map(usuarioCriarDTO, Usuario.class));
+        UsuarioDTO usuarioDTO = mapper.map(usuarioNovo, UsuarioDTO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
-        return ResponseEntity.ok().body(usuarioService.listarUsuarios());
-    }
-
-    @GetMapping("/{email}")
-    public ResponseEntity<Usuario> buscarUsuario(@PathVariable String email) {
-        return ResponseEntity.ok().body(usuarioService.buscar(email));
-    }
-
-    @DeleteMapping("/remove/{id}")
-    public ResponseEntity removerUsuario(@PathVariable Long id) {
-        usuarioService.removerUsuario(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity listar() {
+        var listar = usuarioService.listar();
+        List<UsuarioDTO> usuariosDTO = Arrays.asList(mapper.map(listar, UsuarioDTO[].class));
+        return ResponseEntity.ok().body(usuariosDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioAtualizarDTO usuario) {
-        return ResponseEntity.ok().body(usuarioService.atualizarUsuario(id, usuario));
+    public ResponseEntity atualizar(@PathVariable Long id, @RequestBody UsuarioCriarDTO usuarioCriarDTO) {
+        var usuarioAtualizado = usuarioService.atualizar(id, mapper.map(usuarioCriarDTO, Usuario.class));
+        UsuarioDTO usuarioDTO = mapper.map(usuarioAtualizado, UsuarioDTO.class);
+        return ResponseEntity.ok().body(usuarioDTO);
     }
 
-    @PutMapping("/novo/{id}")
-    public ResponseEntity adicionaNovoCartao(@PathVariable Long id, @RequestBody @Valid Cartao cartao, BindingResult result) {
-
-        if (result.hasErrors()) {
-
-            Map<String, String> errors = new HashMap<>();
-
-            result.getFieldErrors().forEach(error -> {
-                String fieldName = error.getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.put(fieldName, errorMessage);
-            });
-
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        return ResponseEntity.ok().body(usuarioService.adicionaNovoCartao(id, cartao));
+    @DeleteMapping("/{id}")
+    public ResponseEntity remover(@PathVariable Long id) {
+        usuarioService.remover(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping("/{id}/status/{numero}")
-    public ResponseEntity StatusCartao(@PathVariable Long id, @PathVariable Integer numero) {
-        return ResponseEntity.ok().body(usuarioService.StatusCartao(id, numero));
+    @PostMapping("/{id}/cartoes")
+    public ResponseEntity criarCartao(@PathVariable Long id, @RequestBody @Valid Cartao cartao) {
+        return ResponseEntity.ok().body(usuarioService.adicionarNovoCartao(id, cartao));
     }
 
-    @DeleteMapping("/remover-cartao/{id}")
+    @GetMapping("/{id}/cartoes")
+    public ResponseEntity listarCartoes(@PathVariable Long id) {
+        List<Cartao> cartoesDoUsuario = usuarioService.listarCartoesPorUsuario(id);
+        List<CartaoDTO> cartoesDTO = Arrays.asList(mapper.map(cartoesDoUsuario, CartaoDTO[].class));
+        return ResponseEntity.ok().body(cartoesDoUsuario);
+    }
+
+    @PatchMapping("{id}/cartoes/{idCartao}/status")
+    public ResponseEntity alterarStatusCartao(@PathVariable Long id, @PathVariable Long idCartao) {
+        return ResponseEntity.ok().body(usuarioService.alterarStatusCartao(id, idCartao));
+    }
+
+    @DeleteMapping("{id}/cartoes/{idCartao}")
     public ResponseEntity removerCartao(@PathVariable Long id) {
         cartaoService.removerCartao(id);
         return ResponseEntity.noContent().build();
