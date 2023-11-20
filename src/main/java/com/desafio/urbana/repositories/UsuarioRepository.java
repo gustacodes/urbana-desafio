@@ -72,11 +72,11 @@ public class UsuarioRepository {
 
     @Transactional
     public Usuario adicionarNovoCartao(Long id, Cartao cartao) {
-        List<Cartao> card = new ArrayList<>();
-        card.add(cartao);
+        List<Cartao> cartaoNovo = new ArrayList<>();
+        cartaoNovo.add(cartao);
 
         Usuario usuario = entityManager.find(Usuario.class, id);
-        cartaoRepository.associarCartoesAoUsuario(id, card);
+        cartaoRepository.associarCartoesAoUsuario(id, cartaoNovo);
         entityManager.merge(usuario);
 
         return usuario;

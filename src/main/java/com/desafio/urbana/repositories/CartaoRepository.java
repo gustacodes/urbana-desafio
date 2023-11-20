@@ -20,13 +20,11 @@ public class CartaoRepository {
 
     @Transactional
     public Cartao alterarStatus(Long id) {
-
         Cartao cartao = buscarCartaoId(id);
         cartao.setStatus(!cartao.getStatus());
         entityManager.merge(cartao);
 
         return cartao;
-
     }
 
     public Cartao buscarCartaoId(Long id) {
@@ -42,17 +40,14 @@ public class CartaoRepository {
     }
 
     public void associarCartoesAoUsuario(Long usuarioId, List<Cartao> cartoes) {
-
         for (Cartao cartao : cartoes) {
             persistirCartao(cartao, usuarioId);
             Long cartaoId = obterUltimoIdInserido();
             associarUsuarioCartao(usuarioId, cartaoId);
         }
-
     }
 
     public void persistirCartao(Cartao cartao, Long usuarioId) {
-
         var numeroGerado = new Random();
         int numero = numeroGerado.nextInt(1000000);
 
@@ -81,7 +76,6 @@ public class CartaoRepository {
     }
 
     public void removerCartao(Long id) {
-
         Cartao cartao = entityManager.find(Cartao.class, id);
 
         entityManager.createNativeQuery("DELETE FROM usuario_cartao WHERE cartao_id = :cartaoId")

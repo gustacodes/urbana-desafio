@@ -22,10 +22,10 @@ public class UsuarioService {
     @Autowired
     private CartaoRepository cartaoRepository;
 
-    public Usuario buscarPorExistentePorId(Long id) {
+    public Usuario buscarExistentePorId(Long id) {
         Usuario usuario = usuarioRepository.buscarPorId(id);
 
-        if(usuario == null) {
+        if (usuario == null) {
             throw new UsuarioInexistenteException(id);
         }
 
@@ -57,12 +57,13 @@ public class UsuarioService {
     public List<Usuario> listar() {
         return usuarioRepository.listar();
     }
+
     public void remover(Long id) {
         usuarioRepository.remover(id);
     }
 
     public Usuario atualizar(Long id, Usuario usuario) {
-        Usuario usuarioExistente = buscarPorExistentePorId(id);
+        Usuario usuarioExistente = buscarExistentePorId(id);
 
         validarAtualizacao(id, usuario);
 
@@ -80,6 +81,7 @@ public class UsuarioService {
             }
 
         }
+
         return usuarioRepository.atualizar(usuario);
     }
 
@@ -101,7 +103,7 @@ public class UsuarioService {
     }
 
     public List<Cartao> listarCartoesPorUsuario(Long id) {
-        Usuario usuario = buscarPorExistentePorId(id);
+        Usuario usuario = buscarExistentePorId(id);
         return usuario.getCartoes();
     }
 }
