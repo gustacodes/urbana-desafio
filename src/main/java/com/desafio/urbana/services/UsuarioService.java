@@ -79,10 +79,9 @@ public class UsuarioService {
             if (usuario.getSenha() != null) {
                 usuarioExistente.setSenha(usuario.getSenha());
             }
-
         }
 
-        return usuarioRepository.atualizar(usuario);
+        return usuarioRepository.atualizar(usuarioExistente);
     }
 
     public Usuario adicionarNovoCartao(Long id, Cartao cartao) {
