@@ -28,15 +28,7 @@ public class CartaoRepository {
     }
 
     public Cartao buscarCartaoId(Long id) {
-
-        try {
-
-            return entityManager.find(Cartao.class, id);
-
-        } catch (NoResultException e) {
-            throw new ConsultaUsuarioPorEmailException("Cartão não encontrado! Verifique o e-mail digitado.");
-        }
-
+        return entityManager.find(Cartao.class, id);
     }
 
     public void associarCartoesAoUsuario(Long usuarioId, List<Cartao> cartoes) {

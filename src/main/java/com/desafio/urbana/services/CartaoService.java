@@ -1,8 +1,11 @@
 package com.desafio.urbana.services;
 
 import com.desafio.urbana.entities.Cartao;
+import com.desafio.urbana.exceptions.CartaoInexistenteException;
+import com.desafio.urbana.exceptions.ConsultaUsuarioPorEmailException;
 import com.desafio.urbana.repositories.CartaoRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,14 @@ public class CartaoService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    public Cartao buscarCartaoId(Long id) {
+        try {
+            return cartaoRepository.buscarCartaoId(id);
+        } catch (Exception e) {
+            throw new CartaoInexistenteException("Cartão não encontrado! Verifique o e-mail digitado.");
+        }
+    }
 
     public void associarCartoesAoUsuario(Long usuarioId, List<Cartao> cartoes) {
         cartaoRepository.associarCartoesAoUsuario(usuarioId, cartoes);
