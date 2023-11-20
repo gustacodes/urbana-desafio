@@ -1,9 +1,22 @@
 package com.desafio.urbana.dto;
 
+import com.desafio.urbana.entities.Cartao;
+
+import java.util.List;
+
 public class UsuarioDTO{
     private Long id;
     private String nome;
     private String email;
+    private List<Cartao> cartoes;
+
+    public List<Cartao> getCartoes() {
+        return cartoes;
+    }
+
+    public void setCartoes(List<Cartao> cartoes) {
+        this.cartoes = cartoes;
+    }
 
     public String getNome() {
         return nome;

@@ -23,6 +23,10 @@ public class CartaoService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public List<Cartao> listarCartoes() {
+        return cartaoRepository.listarCartoes();
+    }
+
     public Cartao buscarCartaoId(Long id) {
         try {
             return cartaoRepository.buscarCartaoId(id);
@@ -43,8 +47,8 @@ public class CartaoService {
         cartaoRepository.associarUsuarioCartao(usuarioId, cartaoId);
     }
 
-    public void removerCartao(Long id) {
-        cartaoRepository.removerCartao(id);
+    public void removerCartao(Long idCartao) {
+        cartaoRepository.removerCartao(idCartao);
     }
 
 }

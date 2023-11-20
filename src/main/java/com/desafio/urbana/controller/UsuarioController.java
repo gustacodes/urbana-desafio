@@ -76,8 +76,8 @@ public class UsuarioController {
     }
 
     @DeleteMapping("{id}/cartoes/{idCartao}")
-    public ResponseEntity removerCartao(@PathVariable Long id) {
-        cartaoService.removerCartao(id);
+    public ResponseEntity removerCartao(@PathVariable Long idCartao) {
+        cartaoService.removerCartao(idCartao);
         return ResponseEntity.noContent().build();
     }
 

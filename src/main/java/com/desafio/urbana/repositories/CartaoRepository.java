@@ -1,10 +1,12 @@
 package com.desafio.urbana.repositories;
 
 import com.desafio.urbana.entities.Cartao;
+import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.exceptions.ConsultaUsuarioPorEmailException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,14 @@ public class CartaoRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    public List<Cartao> listarCartoes() {
+        String select = "SELECT u FROM Cartao u";
+        TypedQuery<Cartao> query = entityManager.createQuery(select, Cartao.class);
+        List<Cartao> cartoes = query.getResultList();
+
+        return cartoes;
+    }
 
     @Transactional
     public Cartao alterarStatus(Long id) {
@@ -67,8 +77,8 @@ public class CartaoRepository {
                 .executeUpdate();
     }
 
-    public void removerCartao(Long id) {
-        Cartao cartao = entityManager.find(Cartao.class, id);
+    public void removerCartao(Long idCartao) {
+        Cartao cartao = entityManager.find(Cartao.class, idCartao);
 
         entityManager.createNativeQuery("DELETE FROM usuario_cartao WHERE cartao_id = :cartaoId")
                 .setParameter("cartaoId", cartao.getId())
