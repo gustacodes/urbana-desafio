@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@Table(name = "tb_cartoes")
 public class Cartao {
 
     @Id

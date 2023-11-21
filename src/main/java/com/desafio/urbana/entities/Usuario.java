@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
+@Table(name = "tb_usuarios")
 public class Usuario {
 
     @Id
@@ -19,7 +20,7 @@ public class Usuario {
     private String email;
     @NotBlank(message = "Senha obrigatória")
     private String senha;
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Cartao> cartoes;
 
     public Long getId() {
