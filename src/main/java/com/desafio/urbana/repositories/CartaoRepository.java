@@ -1,10 +1,7 @@
 package com.desafio.urbana.repositories;
 
 import com.desafio.urbana.entities.Cartao;
-import com.desafio.urbana.entities.Usuario;
-import com.desafio.urbana.exceptions.ConsultaUsuarioPorEmailException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;

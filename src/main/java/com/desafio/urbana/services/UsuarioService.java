@@ -46,7 +46,6 @@ public class UsuarioService {
     }
 
     private void validarAtualizacao(Long id, Usuario usuario) {
-
         var usuarioExistente = usuarioRepository.buscarPorEmail(usuario.getEmail());
 
         if (usuarioExistente != null && usuarioExistente.getId() != id) {
