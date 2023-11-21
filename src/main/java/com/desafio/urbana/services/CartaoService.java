@@ -1,24 +1,26 @@
 package com.desafio.urbana.services;
 
 import com.desafio.urbana.entities.Cartao;
+import com.desafio.urbana.entities.Usuario;
 import com.desafio.urbana.exceptions.CartaoInexistenteException;
-import com.desafio.urbana.exceptions.ConsultaUsuarioPorEmailException;
 import com.desafio.urbana.repositories.CartaoRepository;
+import com.desafio.urbana.repositories.UsuarioRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Optional;
 
 @Service
 public class CartaoService {
 
     @Autowired
     private CartaoRepository cartaoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -32,6 +34,19 @@ public class CartaoService {
             return cartaoRepository.buscarCartaoId(id);
         } catch (Exception e) {
             throw new CartaoInexistenteException("Cartão não encontrado! Verifique o e-mail digitado.");
+        }
+    }
+
+    public Cartao alterarStatusCartao(Long id, Long idCartao) {
+        Usuario usuario = usuarioRepository.buscarPorId(id);
+        List<Cartao> cartoes = usuario.getCartoes();
+        Optional<Cartao> cartaoOptional = cartoes.stream().filter(card -> card.getId() == idCartao).findFirst();
+
+        if (cartaoOptional.isPresent()) {
+            var cartao = cartaoOptional.get();
+            return cartaoRepository.alterarStatus(cartao.getId());
+        } else {
+            throw new CartaoInexistenteException("Cartão inexistente");
         }
     }
 

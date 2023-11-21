@@ -72,7 +72,7 @@ public class UsuarioController {
 
     @PatchMapping("{id}/cartoes/{idCartao}/status")
     public ResponseEntity alterarStatusCartao(@PathVariable Long id, @PathVariable Long idCartao) {
-        return ResponseEntity.ok().body(usuarioService.alterarStatusCartao(id, idCartao));
+        return ResponseEntity.ok().body(cartaoService.alterarStatusCartao(id, idCartao));
     }
 
     @DeleteMapping("{id}/cartoes/{idCartao}")

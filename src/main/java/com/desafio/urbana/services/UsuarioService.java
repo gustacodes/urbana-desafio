@@ -37,7 +37,7 @@ public class UsuarioService {
         return usuarioRepository.persistirUsuario(usuario);
     }
 
-    private void validarCriacao(Usuario usuario) {
+    public void validarCriacao(Usuario usuario) {
         var usuarioExistente = usuarioRepository.buscarPorEmail(usuario.getEmail());
 
         if (usuarioExistente != null) {
@@ -45,7 +45,7 @@ public class UsuarioService {
         }
     }
 
-    private void validarAtualizacao(Long id, Usuario usuario) {
+    public void validarAtualizacao(Long id, Usuario usuario) {
         var usuarioExistente = usuarioRepository.buscarPorEmail(usuario.getEmail());
 
         if (usuarioExistente != null && usuarioExistente.getId() != id) {
@@ -85,19 +85,6 @@ public class UsuarioService {
 
     public Usuario adicionarNovoCartao(Long id, Cartao cartao) {
         return usuarioRepository.adicionarNovoCartao(id, cartao);
-    }
-
-    public Cartao alterarStatusCartao(Long id, Long idCartao) {
-        Usuario usuario = usuarioRepository.buscarPorId(id);
-        List<Cartao> cartoes = usuario.getCartoes();
-        Optional<Cartao> cartaoOptional = cartoes.stream().filter(card -> card.getId() == idCartao).findFirst();
-
-        if (cartaoOptional.isPresent()) {
-            var cartao = cartaoOptional.get();
-            return cartaoRepository.alterarStatus(cartao.getId());
-        } else {
-            throw new CartaoInexistenteException("Cartão inexistente");
-        }
     }
 
     public List<Cartao> listarCartoesPorUsuario(Long id) {
