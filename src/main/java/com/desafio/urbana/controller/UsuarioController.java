@@ -47,27 +47,20 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public ResponseEntity atualizar(@PathVariable Long id, @RequestBody UsuarioCriarDTO usuarioCriarDTO) {
-        var usuarioAtualizado = usuarioService.atualizar(id, mapper.map(usuarioCriarDTO, Usuario.class));
+        var usuarioAtualizado = usuarioService.atualizarUsuario(id, mapper.map(usuarioCriarDTO, Usuario.class));
         UsuarioDTO usuarioDTO = mapper.map(usuarioAtualizado, UsuarioDTO.class);
         return ResponseEntity.ok().body(usuarioDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity remover(@PathVariable Long id) {
-        usuarioService.remover(id);
+        usuarioService.removerUsuario(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/{id}/cartoes")
     public ResponseEntity criarCartao(@PathVariable Long id, @RequestBody @Valid Cartao cartao) {
         return ResponseEntity.ok().body(usuarioService.adicionarNovoCartao(id, cartao));
-    }
-
-    @GetMapping("/{id}/cartoes")
-    public ResponseEntity listarCartoes(@PathVariable Long id) {
-        List<Cartao> cartoesDoUsuario = usuarioService.listarCartoesPorUsuario(id);
-        List<CartaoDTO> cartoesDTO = Arrays.asList(mapper.map(cartoesDoUsuario, CartaoDTO[].class));
-        return ResponseEntity.ok().body(cartoesDoUsuario);
     }
 
     @PatchMapping("{id}/cartoes/{idCartao}/status")

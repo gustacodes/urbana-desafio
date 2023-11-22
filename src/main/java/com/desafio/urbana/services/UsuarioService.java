@@ -10,7 +10,6 @@ import com.desafio.urbana.repositories.UsuarioRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -32,7 +31,7 @@ public class UsuarioService {
         return usuarioRepositoryJPA.findAll();
     }
 
-    public Usuario buscarExistentePorId(Long id) {
+    public Usuario buscarUsuarioPorId(Long id) {
         Usuario usuario = usuarioRepositoryJPA.findById(id).get();
 
         if (usuario == null) {
@@ -42,7 +41,7 @@ public class UsuarioService {
         return usuario;
     }
 
-    public void remover(Long id) {
+    public void removerUsuario(Long id) {
         usuarioRepositoryJPA.deleteById(id);
     }
 
@@ -62,8 +61,8 @@ public class UsuarioService {
         }
     }
 
-    public Usuario atualizar(Long id, Usuario usuario) {
-        Usuario usuarioExistente = buscarExistentePorId(id);
+    public Usuario atualizarUsuario(Long id, Usuario usuario) {
+        Usuario usuarioExistente = buscarUsuarioPorId(id);
 
         validarAtualizacao(id, usuario);
 
@@ -89,7 +88,7 @@ public class UsuarioService {
         int numero = numeroGerado.nextInt(1000000);
         cartao.setNumeroCartao(numero);
 
-        Usuario usuario = buscarExistentePorId(id);
+        Usuario usuario = buscarUsuarioPorId(id);
         cartao.setUsuario(usuario);
         List<Cartao> cartoes = usuario.getCartoes();
         cartoes.add(cartao);
@@ -101,7 +100,7 @@ public class UsuarioService {
     }
 
     public Cartao alterarStatusCartao(Long id, Long idCartao) {
-        Usuario usuario = buscarExistentePorId(id);
+        Usuario usuario = buscarUsuarioPorId(id);
         List<Cartao> cartoes = usuario.getCartoes();
         Optional<Cartao> cartaoOptional = cartoes.stream().filter(card -> card.getId() == idCartao).findFirst();
 
@@ -112,11 +111,6 @@ public class UsuarioService {
         } else {
             throw new CartaoInexistenteException("Cartão inexistente");
         }
-    }
-
-    public List<Cartao> listarCartoesPorUsuario(Long id) {
-        Usuario usuario = buscarExistentePorId(id);
-        return usuario.getCartoes();
     }
 
 }
