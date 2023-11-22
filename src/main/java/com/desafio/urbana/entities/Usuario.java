@@ -20,7 +20,7 @@ public class Usuario {
     private String email;
     @NotBlank(message = "Senha obrigatória")
     private String senha;
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Cartao> cartoes;
 
     public Long getId() {

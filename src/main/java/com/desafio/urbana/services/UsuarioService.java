@@ -90,15 +90,12 @@ public class UsuarioService {
         cartao.setNumeroCartao(numero);
 
         Usuario usuario = buscarExistentePorId(id);
-        List<Cartao> novoCartao = new ArrayList<>();
-        novoCartao.add(cartao);
+        cartao.setUsuario(usuario);
+        List<Cartao> cartoes = usuario.getCartoes();
+        cartoes.add(cartao);
 
-        if (usuario != null) {
-            usuario.setCartoes(novoCartao);
-            cartao.setUsuario(usuario);
-            cartaoRepositoryJPA.save(cartao);
-            usuarioRepositoryJPA.save(usuario);
-        }
+        usuario.setCartoes(cartoes);
+        usuarioRepositoryJPA.save(usuario);
 
         return usuario;
     }
