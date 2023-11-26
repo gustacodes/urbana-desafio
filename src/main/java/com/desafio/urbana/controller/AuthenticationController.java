@@ -1,6 +1,8 @@
 package com.desafio.urbana.controller;
 
+import com.desafio.urbana.config.TokenService;
 import com.desafio.urbana.dto.AutenthicationDTO;
+import com.desafio.urbana.dto.LoginResponseDTO;
 import com.desafio.urbana.dto.RegistrarDTO;
 import com.desafio.urbana.entities.User;
 import com.desafio.urbana.repositories.UserRepository;
@@ -25,11 +27,16 @@ public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AutenthicationDTO data) {
         var usuario = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
         var auth = this.authenticationManager.authenticate(usuario);
-        return ResponseEntity.ok().build();
+
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/registrar")
