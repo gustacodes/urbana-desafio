@@ -25,7 +25,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("auth-api") //Emissor ou criador do Token
                     .withSubject(user.getLogin()) //Informa quem é o usuário que está recebendo o Token
-                    .withExpiresAt(gerarExpiracaoDoToken())
+                    .withExpiresAt(gerarExpiracaoDoToken()) //Duração do Token
                     .sign(algorithm);
 
             return token;
@@ -50,6 +50,7 @@ public class TokenService {
         }
     }
 
+    //Método para determinar a validade do Token
     private Instant gerarExpiracaoDoToken() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
