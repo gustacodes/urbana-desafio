@@ -28,6 +28,11 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    @GetMapping
+    public ResponseEntity lista() {
+        return ResponseEntity.ok().body(userRepository.findAll());
+    }
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AutenthicationDTO data) {
         var usuario = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
